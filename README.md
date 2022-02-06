@@ -1,7 +1,7 @@
 ## Assignment 5: Build Your Own Project
 The goal of this assignment is to use the infrastructure you have built in previous assignments. 
 
-### 2. Build a project
+### 1. Build a project
 
 Choose a project of your liking. Look around for ideas. Talk to fellow students about ideas and their feasibility. Cite any sources (url, books, discussion with others) you used to come up with your project. The project does not need to move on wheels. It can just be a stationary construct with moving parts and does something interesting (and hopefully, useful).
 
