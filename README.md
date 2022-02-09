@@ -47,4 +47,3 @@ git add file1.c file2.c file3.c
 git commit -m "Commit message"  
 git push  
 ```
-
