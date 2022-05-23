@@ -1,0 +1,9 @@
+*.elf
+*.map
+*.lst
+*.o
+*.lss
+*.sym
+*.bin
+.dep/
+.vscode/
