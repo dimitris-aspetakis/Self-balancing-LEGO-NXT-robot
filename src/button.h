@@ -15,5 +15,6 @@ extern char *ButtonToString[];
 void ButtonInit(void);
 void ButtonExit(void);
 enum button_t ButtonRead(void);
+enum button_t ButtonReadDown(void);
 
 #endif

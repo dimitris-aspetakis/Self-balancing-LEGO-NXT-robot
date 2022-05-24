@@ -173,11 +173,17 @@ void DisplayChar(UBYTE X, UBYTE Y, UBYTE Char)
     }
 }
 
-void DisplayNum(UBYTE X, UBYTE Y, ULONG Num)
+void DisplayNum(UBYTE X, UBYTE Y, int Num)
 {
     int digit;
     UBYTE c;
     int digit_count;
+    if (Num < 0)
+    {
+        DisplayChar(X, Y, '-');
+        X += Font.ItemPixelsX;
+        Num *= -1;
+    }
     if (Num == 0)
     {
         DisplayChar(X, Y, '0');
@@ -193,6 +199,35 @@ void DisplayNum(UBYTE X, UBYTE Y, ULONG Num)
         DisplayChar(X, Y, c);
         Num = Num / 10;
         X -= Font.ItemPixelsX;
+    }
+}
+
+void DisplayFloat(UBYTE X, UBYTE Y, float Num)
+{
+    if (Num == 0)
+    {
+        DisplayChar(X, Y, '0');
+        return;
+    }
+    if (Num < 0)
+    {
+        DisplayChar(X, Y, '-');
+        X += Font.ItemPixelsX;
+        Num *= -1;
+    }
+    int u = (int)Num;
+    float d = Num - u;
+    int decimal_digits = 2;
+    DisplayNum(X, Y, u);
+    X += Font.ItemPixelsX * (log10(u) + 1);
+    DisplayChar(X, Y, '.');
+    X += Font.ItemPixelsX;
+    for (int i = 0; i < decimal_digits; i++)
+    {
+        d *= 10;
+        DisplayNum(X, Y, (int)d);
+        d -= (int)d;
+        X += Font.ItemPixelsX;
     }
 }
 

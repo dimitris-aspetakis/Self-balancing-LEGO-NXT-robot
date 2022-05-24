@@ -8,6 +8,7 @@
 #include "input.h"
 #include "led.h"
 #include "output.h"
+#include "pid.h"
 #include "pit.h"
 #include "sound.h"
 #include <assert.h>
@@ -15,6 +16,9 @@
 
 int main(void)
 {
+    UWORD sensor_value;
+    UBYTE balance = 0;
+
     LedSwitchOff(LightSensor);
     HardwareInit(); // need this to init PIOA clock
     DisplayInit();
@@ -33,10 +37,8 @@ int main(void)
     while (1)
     {
         DisplayErase();
-        UWORD sensor_value;
 
         DisplayString(0, 0, (UBYTE *)ButtonToString[ButtonRead()]);
-
 
         InputGetSensorValue(&sensor_value, TouchSensor);
         DisplayString(0, 8, (UBYTE *)"Touch: ");
@@ -65,25 +67,30 @@ int main(void)
         DisplayString(0, 56, (UBYTE *)"Battery(%): ");
         DisplayNum(12 * 6, 56, InputReadBatteryLevel());
 
-
-        switch (ButtonRead())
+        switch (ButtonReadDown())
         {
         case BUTTON_ENTER:
-            I2CCtrl(REPROGRAM);
+            balance = !balance;
+            reset_self_balance();
+            OutputSetSpeed(MOTOR_A, 0);
+            OutputSetSpeed(MOTOR_C, 0);
             break;
         case BUTTON_EXIT:
             I2CCtrl(POWERDOWN);
             break;
         case BUTTON_LEFT:
-            LedSwitchOff(2);
+            I2CCtrl(REPROGRAM);
             break;
         case BUTTON_RIGHT:
             InputGyroCalibrate();
+            reset_self_balance();
             break;
         case BUTTON_NONE:
             break;
         }
 
+        if (balance)
+            self_balance();
 
         DisplayUpdateSync();
         I2CTransfer();

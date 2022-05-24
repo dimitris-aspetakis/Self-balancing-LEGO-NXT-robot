@@ -19,5 +19,9 @@ void OutputExit(void)
 
 void OutputSetSpeed(UBYTE MotorNr, SBYTE Speed)
 {
+    if (Speed < -100)
+        Speed = -100;
+    else if (Speed > 100)
+        Speed = 100;
     IoToAvr.PwmValue[MotorNr] = Speed;
 }

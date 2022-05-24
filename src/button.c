@@ -31,3 +31,28 @@ enum button_t ButtonRead(void)
         return BUTTON_NONE;
     }
 }
+
+enum button_t ButtonReadDown(void)
+{
+    static enum button_t prev_button = BUTTON_NONE;
+
+    if (IoFromAvr.Buttons == 0)
+        return prev_button = BUTTON_NONE;
+
+    if (prev_button != BUTTON_NONE)
+        return BUTTON_NONE;
+
+    switch (IoFromAvr.Buttons)
+    {
+    case 127:
+        return prev_button = BUTTON_LEFT;
+    case 406:
+        return prev_button = BUTTON_RIGHT;
+    case 2047:
+        return prev_button = BUTTON_ENTER;
+    case 1023:
+        return prev_button = BUTTON_EXIT;
+    default:
+        return prev_button = BUTTON_NONE;
+    }
+}

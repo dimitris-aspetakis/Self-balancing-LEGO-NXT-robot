@@ -19,6 +19,6 @@ void InputGetSensorValue(UWORD *value, UBYTE port);
 UBYTE InputReadBatteryLevel();
 UBYTE InputTouchSensorActiveted();
 void InputGyroCalibrate();
-UWORD InputReadGyro();
+float InputReadGyro();
 
 #endif

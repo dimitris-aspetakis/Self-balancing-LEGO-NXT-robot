@@ -1,3 +1,4 @@
+#include "pit.h"
 #include "input.h"
 #include "arm2avr.h"
 
@@ -36,9 +37,9 @@ void InputGyroCalibrate()
     angle = 0;
 }
 
-UWORD InputReadGyro()
+float InputReadGyro()
 {
-    angle += 0.002 * ((int)IoFromAvr.AdValue[GyroSensor] - 609);
-
-    return (UWORD)angle;
+    // angle += 0.002 * ((int)IoFromAvr.AdValue[GyroSensor] - 609.12);
+    float angular_speed = IoFromAvr.AdValue[GyroSensor] - 609.12;
+    return angular_speed;
 }

@@ -4,7 +4,6 @@
 #include "arm2avr.h"
 #include "display.h"
 #include "pit.h"
-#include <assert.h>
 #include <stdconst.h>
 #include <string.h>
 
@@ -239,6 +238,12 @@ void I2CTransferInitSync()
 
 void I2CTransferSync()
 {
+    static int init = 0;
+    if (!init)
+    {
+        I2CTransferInitSync();
+        init = 1;
+    }
     DataRxSync();
     spindelayms(2);
     DataTxSync((UBYTE *)&IoToAvr, BYTES_TO_TX);
@@ -253,8 +258,12 @@ void I2CCtrl(enum power_t p)
 {
     IoToAvr.Power = p >> 8;
     IoToAvr.PwmFreq = p;
-
-    return;
+    if (p == REPROGRAM)
+    {
+        IoToAvr.PwmValue[0] = 0;
+        IoToAvr.PwmValue[1] = 0;
+        IoToAvr.PwmValue[2] = 0;
+    }
 }
 
 void I2CInit(void)
