@@ -3,35 +3,32 @@
 #include "input.h"
 #include "output.h"
 
-#define MOTOR_OFFSET 40
+#define MOTOR_OFFSET 0
 
-float Kp = 0.0436;   // 0.0336
-float Ki = 0.71688;  // 0.2688
-float Kd = 0.00504; // 0.000504
-// float Ti = 0.02;
-// float Td = 0.2;
+float Kp = 786;   // 0.0336
+float Ki = 2688;  // 0.2688
+float Kd = 10.47; // 0.000504
 float dt = 0.002;
 
-float past_values[1000] = {0};
-unsigned curr_index = 0;
-float d = 0;
-float e = 0;
-float e_prev = 0;
+float proportional = 0;
+float integral = 0;
+float scale = 0.25;
+float derivative = 0;
+float derivative_prev = 0;
+
 float u = 0;
 
 void self_balance()
 {
-    e = InputReadGyro();
-    past_values[curr_index] = e;
-    d = (e - e_prev) / dt;
-    float sum = 0;
-    for (unsigned i = 0; i < 1000; ++i)
-        sum += past_values[i];
-    u = Kp * e + Ki * sum + Kd * d;
-    // u = Kp*(e + 1/Ti*i + Td*d);
-    e_prev = e;
+    proportional = InputReadGyro();
+    integral += derivative / scale;
+    derivative = (derivative - derivative_prev) / dt;
 
-    // DisplayFloat(36, 8, u);
+    u = Kp * derivative + Ki * integral + Kd * proportional;
+
+    derivative_prev = derivative;
+
+    // DisplayFloat(36, 8, u)   // FIXME
 
     if (u < -100 + MOTOR_OFFSET)
         u = -100 + MOTOR_OFFSET;
@@ -48,16 +45,16 @@ void self_balance()
         OutputSetSpeed(0, (int)u + MOTOR_OFFSET);
         OutputSetSpeed(2, (int)u + MOTOR_OFFSET);
     }
-
-    curr_index = (curr_index + 1) % 1000;
 }
 
 void reset_self_balance()
 {
-    for (unsigned i = 0; i < 1000; ++i)
-        past_values[i] = 0;
-    d = 0;
-    e = 0;
-    e_prev = 0;
+    angle = 0;
+
+    proportional = 0;
+    integral = 0;
+    derivative = 0;
+    derivative_prev = 0;
+
     u = 0;
 }

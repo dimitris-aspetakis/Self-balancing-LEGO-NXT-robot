@@ -2,6 +2,7 @@
 #include "input.h"
 #include "arm2avr.h"
 
+float gyro_offset = 512;
 float angle = 180;
 
 void InputInit(void)
@@ -39,7 +40,5 @@ void InputGyroCalibrate()
 
 float InputReadGyro()
 {
-    // angle += 0.002 * ((int)IoFromAvr.AdValue[GyroSensor] - 609.12);
-    float angular_speed = IoFromAvr.AdValue[GyroSensor] - 609.12;
-    return angular_speed;
+    return (angle += 0.002 * 16 * ((int)IoFromAvr.AdValue[GyroSensor] - gyro_offset));
 }

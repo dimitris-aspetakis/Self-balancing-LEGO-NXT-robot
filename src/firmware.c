@@ -18,6 +18,8 @@ int main(void)
 {
     UWORD sensor_value;
     UBYTE balance = 0;
+    unsigned counter = 0;
+    float sum = 0;
 
     LedSwitchOff(LightSensor);
     HardwareInit(); // need this to init PIOA clock
@@ -82,15 +84,22 @@ int main(void)
             I2CCtrl(REPROGRAM);
             break;
         case BUTTON_RIGHT:
-            InputGyroCalibrate();
+            gyro_offset = sum / counter;
+            sum = 0;
+            counter = 0;
             reset_self_balance();
             break;
         case BUTTON_NONE:
             break;
         }
 
+        sum += IoFromAvr.AdValue[GyroSensor];
+        counter++;
+
         if (balance)
             self_balance();
+
+        // DisplayFloat(36, 16, sum / counter);   // FIXME
 
         DisplayUpdateSync();
         I2CTransfer();

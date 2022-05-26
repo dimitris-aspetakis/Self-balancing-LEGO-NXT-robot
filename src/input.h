@@ -2,6 +2,7 @@
 #define _INPUT_H
 #include <stdconst.h>
 
+extern float gyro_offset;
 extern float angle;
 
 enum InputSensor
