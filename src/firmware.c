@@ -48,7 +48,7 @@ int main(void)
                                     : DisplayString(12 * 6, 8, (UBYTE *)"Off");
 
         DisplayString(0, 16, (UBYTE *)"Gyro: ");
-        DisplayNum(12 * 6, 16, InputReadGyro());
+        // DisplayNum(12 * 6, 16, InputReadGyro());
 
         InputGetSensorValue(&sensor_value, MicSensor);
         DisplayString(0, 24, (UBYTE *)"Mic: ");

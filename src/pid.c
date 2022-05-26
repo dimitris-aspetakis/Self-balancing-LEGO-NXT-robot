@@ -5,28 +5,28 @@
 
 #define MOTOR_OFFSET 0
 
-float Kp = 786;   // 0.0336
-float Ki = 2688;  // 0.2688
-float Kd = 10.47; // 0.000504
+float Kp = 12.5;  // 12.5
+float Ki = 0.5;  // 0.5
+float Kd = 0.09; // 0.09
 float dt = 0.002;
 
 float proportional = 0;
 float integral = 0;
 float scale = 0.25;
 float derivative = 0;
-float derivative_prev = 0;
+float proportional_prev = 0;
 
 float u = 0;
 
 void self_balance()
 {
     proportional = InputReadGyro();
-    integral += derivative / scale;
-    derivative = (derivative - derivative_prev) / dt;
+    integral += proportional * scale;
+    derivative = (proportional - proportional_prev) / dt;
 
-    u = Kp * derivative + Ki * integral + Kd * proportional;
+    u = Kp * proportional + Ki * integral + Kd * derivative;
 
-    derivative_prev = derivative;
+    proportional_prev = proportional;
 
     // DisplayFloat(36, 8, u)   // FIXME
 
@@ -54,7 +54,7 @@ void reset_self_balance()
     proportional = 0;
     integral = 0;
     derivative = 0;
-    derivative_prev = 0;
+    proportional_prev = 0;
 
     u = 0;
 }
