@@ -21,11 +21,9 @@ int main(void)
     unsigned counter = 0;
     float sum = 0;
 
-    LedSwitchOff(LightSensor);
+    LedSwitchOff(SensorPort03);
     HardwareInit(); // need this to init PIOA clock
     DisplayInit();
-    DisplayErase();
-    DisplayUpdateSync();
     PITEnable();
     AICInit();
     SoundInit();
@@ -42,19 +40,19 @@ int main(void)
 
         DisplayString(0, 0, (UBYTE *)ButtonToString[ButtonRead()]);
 
-        InputGetSensorValue(&sensor_value, TouchSensor);
+        InputGetSensorValue(&sensor_value, SensorPort01);
         DisplayString(0, 8, (UBYTE *)"Touch: ");
         InputTouchSensorActiveted() ? DisplayString(12 * 6, 8, (UBYTE *)"On")
                                     : DisplayString(12 * 6, 8, (UBYTE *)"Off");
 
         DisplayString(0, 16, (UBYTE *)"Gyro: ");
-        // DisplayNum(12 * 6, 16, InputReadGyro());
+        DisplayFloat(5 * 6, 16, InputReadGyro());
 
-        InputGetSensorValue(&sensor_value, MicSensor);
+        InputGetSensorValue(&sensor_value, SensorPort02);
         DisplayString(0, 24, (UBYTE *)"Mic: ");
         DisplayNum(12 * 6, 24, sensor_value);
 
-        InputGetSensorValue(&sensor_value, LightSensor);
+        InputGetSensorValue(&sensor_value, SensorPort03);
         DisplayString(0, 32, (UBYTE *)"Light: ");
         DisplayNum(12 * 6, 32, sensor_value);
 
@@ -93,7 +91,15 @@ int main(void)
             break;
         }
 
-        sum += IoFromAvr.AdValue[GyroSensor];
+        if (InputTouchSensorActivetedDown())
+        {
+            gyro_offset = sum / counter;
+            sum = 0;
+            counter = 0;
+            reset_self_balance();
+        }
+
+        sum += IoFromAvr.AdValue[SensorPort01];
         counter++;
 
         if (balance)
@@ -102,7 +108,8 @@ int main(void)
         // DisplayFloat(36, 16, sum / counter);   // FIXME
 
         DisplayUpdateSync();
-        I2CTransfer();
+        I2CTransferSync();
+        InputUpdateGyro();
     }
 
     ButtonExit();

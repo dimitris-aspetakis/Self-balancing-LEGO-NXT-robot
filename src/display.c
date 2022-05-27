@@ -189,7 +189,7 @@ void DisplayNum(UBYTE X, UBYTE Y, int Num)
         DisplayChar(X, Y, '0');
         return;
     }
-    digit_count = log10(Num) + 1;
+    digit_count = (int)log10(Num) + 1;
 
     X += (digit_count - 1) * Font.ItemPixelsX;
     while (Num != 0)
@@ -217,9 +217,9 @@ void DisplayFloat(UBYTE X, UBYTE Y, float Num)
     }
     int u = (int)Num;
     float d = Num - u;
-    int decimal_digits = 2;
+    int decimal_digits = 3;
     DisplayNum(X, Y, u);
-    X += Font.ItemPixelsX * (log10(u) + 1);
+    X += Font.ItemPixelsX * ((int)log10(u) + 1);
     DisplayChar(X, Y, '.');
     X += Font.ItemPixelsX;
     for (int i = 0; i < decimal_digits; i++)

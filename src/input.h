@@ -7,10 +7,10 @@ extern float angle;
 
 enum InputSensor
 {
-    TouchSensor = 0,
-    GyroSensor = 1,
-    MicSensor = 2,
-    LightSensor = 3,
+    SensorPort00 = 0,
+    SensorPort01 = 1,
+    SensorPort02 = 2,
+    SensorPort03 = 3,
 };
 
 void InputInit(void);
@@ -19,7 +19,9 @@ void InputGetSensorValue(UWORD *value, UBYTE port);
 
 UBYTE InputReadBatteryLevel();
 UBYTE InputTouchSensorActiveted();
+UBYTE InputTouchSensorActivetedDown();
 void InputGyroCalibrate();
+void InputUpdateGyro();
 float InputReadGyro();
 
 #endif

@@ -1,16 +1,16 @@
-#include "pit.h"
 #include "input.h"
 #include "arm2avr.h"
+#include "pit.h"
 
 float gyro_offset = 512;
 float angle = 180;
 
 void InputInit(void)
 {
-    IoFromAvr.AdValue[TouchSensor] = 0x03FF;
-    IoFromAvr.AdValue[GyroSensor] = 0x03FF;
-    IoFromAvr.AdValue[MicSensor] = 0x03FF;
-    IoFromAvr.AdValue[LightSensor] = 0x03FF;
+    IoFromAvr.AdValue[SensorPort00] = 0x03FF;
+    IoFromAvr.AdValue[SensorPort01] = 0x03FF;
+    IoFromAvr.AdValue[SensorPort02] = 0x03FF;
+    IoFromAvr.AdValue[SensorPort03] = 0x03FF;
 }
 
 void InputExit(void)
@@ -30,7 +30,16 @@ UBYTE InputReadBatteryLevel()
 
 UBYTE InputTouchSensorActiveted()
 {
-    return IoFromAvr.AdValue[TouchSensor] < 200;
+    return IoFromAvr.AdValue[SensorPort00] < 200;
+}
+
+UBYTE InputTouchSensorActivetedDown()
+{
+    static int prev_value = 0;
+    int value = IoFromAvr.AdValue[SensorPort00] < 200;
+    if (prev_value == 1 && value == 1)
+        return 0;
+    return prev_value = value;
 }
 
 void InputGyroCalibrate()
@@ -38,7 +47,12 @@ void InputGyroCalibrate()
     angle = 0;
 }
 
+void InputUpdateGyro()
+{
+    angle += 0.002 * 16 * ((int)IoFromAvr.AdValue[SensorPort01] - gyro_offset);
+}
+
 float InputReadGyro()
 {
-    return (angle += 0.002 * 16 * ((int)IoFromAvr.AdValue[GyroSensor] - gyro_offset));
+    return angle;
 }
