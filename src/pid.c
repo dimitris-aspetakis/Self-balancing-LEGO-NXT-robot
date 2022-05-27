@@ -5,9 +5,9 @@
 
 #define MOTOR_OFFSET 0
 
-float Kp = 12.62; // 10.62
-float Ki = 2.59;  // 1.59
-float Kd = 0.23;  // 0.30
+float Kp = 13.62; // 10.62
+float Ki = 2.89;  // 1.59
+float Kd = 0.082;  // 0.30
 float dt = 0.002;
 
 float proportional = 0;
