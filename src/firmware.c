@@ -72,6 +72,7 @@ int main(void)
         case BUTTON_ENTER:
             balance = !balance;
             reset_self_balance();
+            InputGyroReset();
             OutputSetSpeed(MOTOR_A, 0);
             OutputSetSpeed(MOTOR_C, 0);
             break;
@@ -86,6 +87,7 @@ int main(void)
             sum = 0;
             counter = 0;
             reset_self_balance();
+            InputGyroReset();
             break;
         case BUTTON_NONE:
             break;
@@ -97,6 +99,7 @@ int main(void)
             sum = 0;
             counter = 0;
             reset_self_balance();
+            InputGyroReset();
         }
 
         sum += IoFromAvr.AdValue[SensorPort01];

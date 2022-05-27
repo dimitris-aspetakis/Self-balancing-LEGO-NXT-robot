@@ -1,9 +1,12 @@
-#include "input.h"
+#include <math.h>
+
 #include "arm2avr.h"
+#include "input.h"
 #include "pit.h"
 
-float gyro_offset = 512;
+float gyro_offset = 609;
 float angle = 180;
+// float buffer[4];
 
 void InputInit(void)
 {
@@ -42,7 +45,7 @@ UBYTE InputTouchSensorActivetedDown()
     return prev_value = value;
 }
 
-void InputGyroCalibrate()
+void InputGyroReset()
 {
     angle = 0;
 }
@@ -50,6 +53,17 @@ void InputGyroCalibrate()
 void InputUpdateGyro()
 {
     angle += 0.002 * 16 * ((int)IoFromAvr.AdValue[SensorPort01] - gyro_offset);
+    // float h, a, b, c, d;
+    // buffer[3] = buffer[2];
+    // buffer[2] = buffer[1];
+    // buffer[1] = buffer[0];
+    // buffer[0] = (int)IoFromAvr.AdValue[SensorPort01] - 609;
+    // h = 0.002 * 16;
+    // a = buffer[0];
+    // b = buffer[1];
+    // c = buffer[2];
+    // d = buffer[3];
+    // angle += h/6*(a + 2*b + 2*c + d);
 }
 
 float InputReadGyro()

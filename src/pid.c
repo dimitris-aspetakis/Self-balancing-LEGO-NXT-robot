@@ -5,9 +5,9 @@
 
 #define MOTOR_OFFSET 0
 
-float Kp = 13.62; // 10.62
-float Ki = 2.89;  // 1.59
-float Kd = 0.082;  // 0.30
+float Kp = 13.62; // 13.62
+float Ki = 2.89;  // 2.89
+float Kd = 0.132; // 0.082
 float dt = 0.002;
 
 float proportional = 0;
@@ -49,8 +49,6 @@ void self_balance()
 
 void reset_self_balance()
 {
-    angle = 0;
-
     proportional = 0;
     integral = 0;
     derivative = 0;
