@@ -1,5 +1,5 @@
 # make PREFIX point to the toolchain path
-PREFIX=../lego-toolchain
+PREFIX=./lego-toolchain
 
 ########################################################################
 # You should not need to modify these settings
