@@ -20,7 +20,7 @@ To build the project in a linux x86 environment, the following dependencies are 
 
 ## Building process
 
-* Build the actual hardware somewhat like the picture above. It's important that the gyro is sturdy and oriented like the picture, since it senses angular velocity for only one axes. If the end result differs from the picture, some of the balancing algorithm's parameters will probably need tweaking - more in the **configuration** section later.
+* Build the actual hardware somewhat like the picture above. It's important that the gyro is sturdy and oriented like the picture, since it senses angular velocity for only one axis. If the end result differs from the picture, some of the balancing algorithm's parameters will probably need tweaking - more in the **configuration** section later.
 
 * `make` to build the project.
 * `make download` to build the project and flash the firmware onto the LEGO brick.
